@@ -27,13 +27,16 @@
       box-sizing: border-box;
     }
     
-    html, body {
+    html {
       width: 100%;
       height: 100%;
       overflow: hidden;
     }
     
     body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background: linear-gradient(135deg, #1a0d2e 0%, #3a1e4a 50%, #5c2e6a 100%);
       color: #fff;
       display: flex;
@@ -44,8 +47,10 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      padding: 0;
     }
     
     .player {
