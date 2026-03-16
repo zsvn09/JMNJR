@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Dear D - JR专属</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <style>
+    /* 彻底锁定背景，消除白边 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      /* 方案：暮色余晖渐变 */
+      background-color: #1a0d2e; 
+      background-image: linear-gradient(180deg, #2c1610 0%, #1a0d2e 100%);
+      background-attachment: fixed;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      color: #fff;
+      box-sizing: border-box;
+      /* 底部 220px 间距，彻底解决刘海屏/地址栏切掉进度条的问题 */
+      padding: env(safe-area-inset-top) 20px 220px 20px;
+    }
+
+    /* 播放器卡片：增加质感与动画 */
+    .player {
+      width: 90%;
+      max-width: 350px;
+      padding: 35px 25px;
+      /* 加深毛玻璃效果 */
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 35px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      -webkit-backdrop-filter: blur(25px);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      
+      /* 入场动画：轻轻上浮 */
+      animation: floatUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @keyframes floatUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 250px;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      object-fit: cover;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      margin: 10px 0 5px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      /* 给文字加一点微光 */
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    p {
+      font-size: 1.1rem;
+      opacity: 0.6;
+      margin: 0 0 30px;
+    }
+
+    /* 播放器样式美化 */
+    audio {
+      width: 100%;
+      height: 40px;
+      /* 反相色处理，让它在暗色背景下呈现精致的白色/灰色 */
+      filter: invert(1) hue-rotate(180deg) brightness(1.6);
+      opacity: 0.85;
+    }
+
+    /* 禁止手机上长按保存图片或弹出菜单（增加 App 感） */
+    img { -webkit-user-drag: none; pointer-events: none; }
+    * { -webkit-touch-callout: none; -webkit-user-select: none; }
+    audio { -webkit-touch-callout: default; -webkit-user-select: auto; }
+  </style>
+</head>
+<body>
+
+  <div class="player">
+    <img class="cover" src="https://i.postimg.cc/DfYqH0sM/IMG-5849.webp" alt="Dear D 封面">
+    <h1>Dear D</h1>
+    <p>JR专属</p>
+    <audio controls autoplay id="audioPlayer">
+      <source src="https://files.catbox.moe/a2m9ox.mp3" type="audio/mpeg">
+      浏览器不支持
+    </audio>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioPlayer');
+    
+    // 关键：确保元数据加载后跳转到 2:22
+    audio.addEventListener('loadedmetadata', function() {
+      audio.currentTime = 142;
+    });
+
+    // 解决移动端自动播放拦截：用户第一次点击屏幕即触发
+    const playMusic = () => {
+      if (audio.paused) {
+        audio.play().catch(err => console.log("等待手动触发"));
+      }
+    };
+    
+    document.addEventListener('touchstart', playMusic, { once: true });
+    document.addEventListener('click', playMusic, { once: true });
+  </script>
+</body>
+</html>
