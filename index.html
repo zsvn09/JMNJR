@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Dear D - JR专属</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#120820">
+
+  <script>
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Dear D (从 2:22 开始)",
+        artist: "顶睿锅 / Yr.",
+        album: "靖茹专属",
+        artwork: [{ src: "https://i.postimg.cc/DfYqH0sM/IMG-5849.webp", sizes: "512x512", type: "image/webp" }]
+      });
+    }
+  </script>
+
+  <style>
+    /* 核心 1：锁定 html 背景色，杜绝任何滑动瞬间的露白 */
+    html {
+      background: #120820; /* 极深紫黑，完美融合刘海/灵动岛 */
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none; /* 彻底禁止 iOS 橡皮筋回弹效果 */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      /* 使用 dvh 确保在所有手机浏览器里都精准占满全屏 */
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #fff;
+      
+      /* 核心 2：暮色余晖渐变 - 从刘海位的黑紫色过渡到背景深紫 */
+      background: linear-gradient(180deg, #120820 0%, #2c1610 45%, #1a0d2e 100%);
+      background-attachment: fixed;
+      
+      box-sizing: border-box;
+      /* 核心 3：精准安全区适配。底部给够 220px 间距，卡片绝不会被切 */
+      padding: env(safe-area-inset-top) 20px 220px 20px;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 播放器卡片 - 增加磨砂质感和浮动感 */
+    .player {
+      width: 88%;
+      max-width: 340px;
+      padding: 35px 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 38px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      /* 卡片淡入动画 */
+      animation: playerFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes playerFadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 240px;
+      aspect-ratio: 1/1;
+      border-radius: 22px;
+      object-fit: cover;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+      /* 防止图片被长按保存导致的 UI 错位 */
+      -webkit-user-drag: none;
+    }
+
+    h1 { 
+      font-size: 1.8rem; 
+      margin: 10px 0 5px; 
+      font-weight: 700; 
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    p { 
+      font-size: 1.1rem; 
+      opacity: 0.5; 
+      margin: 0 0 30px; 
+    }
+
+    /* 播放器控件美化：反相色适配深色模式 */
+    audio {
+      width: 100%;
+      height: 40px;
+      filter: invert(1) hue-rotate(180deg) brightness(1.5);
+      opacity: 0.85;
+    }
+
+    /* 禁止全页面的长按弹出菜单，让它更像一个 App */
+    * { -webkit-touch-callout: none; -webkit-user-select: none; }
+    audio { -webkit-touch-callout: default; -webkit-user-select: auto; }
+  </style>
+</head>
+<body>
+
+  <div class="player">
+    <img class="cover" src="https://i.postimg.cc/DfYqH0sM/IMG-5849.webp" alt="Dear D">
+    <h1>Dear D</h1>
+    <p>JR专属</p>
+    <audio controls autoplay id="audioPlayer">
+      <source src="https://files.catbox.moe/a2m9ox.mp3" type="audio/mpeg">
+      您的浏览器不支持音频播放。
+    </audio>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioPlayer');
+    
+    // 关键逻辑：加载后跳转到 2:22
+    audio.addEventListener('loadedmetadata', function() {
+      audio.currentTime = 142;
+    });
+
+    // 解决移动端自动播放拦截逻辑
+    const handleInitialClick = () => {
+      if (audio.paused) {
+        audio.play().catch(e => console.log("等待手动操作播放"));
+      }
+    };
+
+    // 只要用户点一下屏幕任何地方，立刻开始播放
+    document.addEventListener('touchstart', handleInitialClick, { once: true });
+    document.addEventListener('click', handleInitialClick, { once: true });
+  </script>
+</body>
+</html>
