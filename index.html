@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Dear D - NFC 一碰开歌</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script>
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Dear D ",
+        artist: "顶睿锅 / Yr.",
+        album: "靖茹专属",
+        artwork: [
+          { src: "https://i.postimg.cc/DfYqH0sM/IMG-5849.webp", sizes: "512x512", type: "image/webp" }
+        ]
+      });
+    }
+  </script>
+
+  <style>
+    /* 1. 确保 html 和 body 占满全屏，并且背景颜色统一 */
+    html {
+      height: 100%;
+      background: #1a0d2e; /* 兜底色 */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      /* 使用 dvh 动态视口高度，自动适配有无地址栏的情况 */
+      min-height: 100dvh; 
+      width: 100%;
+      overflow: hidden;
+      
+      /* 渐变背景 */
+      background: linear-gradient(180deg, #1a0d2e 0%, #3a1e4a 50%, #5c2e6a 100%);
+      background-attachment: fixed;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #fff;
+
+      /* 适配 iOS 刘海和底部黑条，确保内容在安全区内 */
+      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+      box-sizing: border-box;
+    }
+
+    /* 播放器卡片优化 */
+    .player {
+      width: 100%;
+      max-width: 340px; /* 稍微缩小一点点，在小屏幕手机上视觉更好 */
+      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.08); /* 减淡背景透明度更通透 */
+      border-radius: 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px); /* 兼容 iOS */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .cover {
+      width: 100%;
+      aspect-ratio: 1 / 1; /* 保持正方形 */
+      max-width: 260px;
+      border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 10px 0 5px;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1.1rem;
+      opacity: 0.7;
+      margin: 0 0 25px;
+    }
+
+    audio {
+      width: 100%;
+      filter: invert(100%) hue-rotate(180deg) brightness(1.5); /* 稍微美化原生播放器颜色 */
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="player">
+    <img class="cover" src="https://i.postimg.cc/DfYqH0sM/IMG-5849.webp" alt="Dear D 封面">
+    <h1>Dear D</h1>
+    <p>JR专属</p>
+    <audio controls autoplay id="audioPlayer">
+      <source src="https://files.catbox.moe/a2m9ox.mp3" type="audio/mpeg">
+      您的浏览器不支持音频播放。
+    </audio>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioPlayer');
+    
+    // 自动跳转到 2:22 (142秒)
+    audio.addEventListener('loadedmetadata', () => {
+      audio.currentTime = 142;
+    });
+
+    // 针对移动端自动播放限制的尝试
+    document.body.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
